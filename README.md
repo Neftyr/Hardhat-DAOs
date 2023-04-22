@@ -1,5 +1,5 @@
 # Building DAO's With Hardhat
 
-1. Write the smart contracts
-2. Write deployment scripts
-3. Write scripts to interact with contracts
+1. Propose
+2. Vote
+3. Queue And Execute Changes
