@@ -1,5 +1,9 @@
 /** @dev ONLY FOR LOCALHOST NETWORK !!! */
 
-export const moveTime = async (time: number) => {}
+import { network } from "hardhat"
 
-export default moveTime
+export async function moveTime(amount: number) {
+    console.log("Moving Time...")
+    await network.provider.send("evm_increaseTime", [amount])
+    console.log(`Moved Forward In Time By ${amount} seconds`)
+}

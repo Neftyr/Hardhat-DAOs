@@ -1,5 +1,5 @@
 import { VOTING_PERIOD, VOTE_REASON, proposalsFile, developmentChains } from "../helper-hardhat-config"
-import { network, ethers } from "hardhat"
+import { ethers, network } from "hardhat"
 import { moveBlocks } from "../utils/move-blocks"
 import * as fs from "fs"
 
@@ -15,17 +15,23 @@ async function main() {
 export async function vote(proposalId: string, voteWay: number, reason: string) {
     console.log("Voting...")
     const govContract = await ethers.getContract("GovernorContract")
-    // Below "castVoteWithReason()" function is from "IGovernor" interface: (uint256 proposalId, uint8 support, string calldata reason)
+    // Below "castVoteWithReason()" function is from "IGovernor.sol" interface: (uint256 proposalId, uint8 support, string calldata reason)
     const voteResTx = await govContract.castVoteWithReason(proposalId, voteWay, reason)
     const voteRecTx = await voteResTx.wait(1)
     console.log(`Vote Reason: ${voteRecTx.events[0].args.reason}`)
-    const proposalState = await govContract.state(proposalId)
+    // 0:Pending, 1:Active, 2:Canceled, 3:Defeated, 4:Succeeded, 5:Queued, 6:Expired, 7:Executed
+    let proposalState = await govContract.state(proposalId)
     console.log(`Current Proposal State: ${proposalState}`)
 
     if (developmentChains.includes(network.name)) {
         await moveBlocks(VOTING_PERIOD + 1)
     }
+
     console.log("Vote Acquired!")
+
+    // 0:Pending, 1:Active, 2:Canceled, 3:Defeated, 4:Succeeded, 5:Queued, 6:Expired, 7:Executed
+    proposalState = await govContract.state(proposalId)
+    console.log(`Current Proposal State: ${proposalState}`)
 }
 
 main()
