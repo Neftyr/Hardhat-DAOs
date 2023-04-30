@@ -3,7 +3,7 @@ import { deployments, ethers } from "hardhat"
 import { assert, expect } from "chai"
 import { FUNC, PROPOSAL_DESCRIPTION, NEW_STORE_VALUE, VOTING_DELAY, VOTING_PERIOD, MIN_DELAY } from "../../helper-hardhat-config"
 import { moveBlocks } from "../../utils/move-blocks"
-import moveTime from "../../utils/move-time"
+import { moveTime } from "../../utils/move-time"
 
 describe("Governor Flow", async () => {
     let governor: GovernorContract
